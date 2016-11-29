@@ -21,12 +21,19 @@ print 'The working directory is (%s)' % (working_dir)
 print 'The devices to backup are (%s)' % (hosts)
 print 'Confirm and continue? (yes or no)'
 confirm = raw_input().lower()
-if confirm is 'y' or 'yes':
+if confirm == 'y' or confirm == 'yes':
     # do the thing
     print 'Fetching running configs ...'
+    from napalm import get_network_driver
     driver = get_network_driver(nos)
-    for host in hosts:
-        driver(hosts, username, passwd)
-        device.open()
+    for device in hosts:
+        host = driver(device, username, passwd)
+        print 'Opening connection to %s' % device
+        host.open()
+        print 'Connected to %s' % device
+        #get_config getter here
+        print 'Closing connection to %s' % device
+        host.close()
+        print 'Closed connection to %s' % device
 else:
-    print 'operation cancelled by user'
+    print '#Operation cancelled by user#'
