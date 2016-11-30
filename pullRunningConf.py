@@ -1,4 +1,5 @@
-import napalm
+from os import path
+from napalm import get_network_driver
 
 # Instructions
 print ''
@@ -24,7 +25,7 @@ confirm = raw_input().lower()
 if confirm == 'y' or confirm == 'yes':
     # do the thing
     print 'Fetching running configs ...'
-    from napalm import get_network_driver
+    #from napalm import get_network_driver
     driver = get_network_driver(nos)
     for device in hosts:
         host = driver(device, username, passwd)
@@ -32,6 +33,11 @@ if confirm == 'y' or confirm == 'yes':
         host.open()
         print 'Connected to %s' % device
         #get_config getter here
+        running_config = host.get_config(retrieve=u'running')
+        filename = open(path.join(working_dir, "{}{}".format(device, '.conf')), 'w')
+        print 'Writing ... \n %s' % filename
+        print type(running_config)
+        filename.write(str(running_config))
         print 'Closing connection to %s' % device
         host.close()
         print 'Closed connection to %s' % device
