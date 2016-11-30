@@ -32,12 +32,10 @@ if confirm == 'y' or confirm == 'yes':
         print 'Opening connection to %s' % device
         host.open()
         print 'Connected to %s' % device
-        #get_config getter here
         running_config = host.get_config(retrieve=u'running')
-        filename = open(path.join(working_dir, "{}{}".format(device, '.conf')), 'w')
-        print 'Writing ... \n %s' % filename
-        print type(running_config)
-        filename.write(str(running_config))
+        with open(path.join(working_dir, "{}{}".format(device, '.conf')), 'w') as filename:
+            for key, value in running_config.items():
+                filename.write('%s\n' % (value))
         print 'Closing connection to %s' % device
         host.close()
         print 'Closed connection to %s' % device
