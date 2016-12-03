@@ -39,5 +39,7 @@ if confirm == 'y' or confirm == 'yes':
         print 'Closing connection to %s' % device
         host.close()
         print 'Closed connection to %s' % device
+    print '.......... Fetch complete'
 else:
     print '#Operation cancelled by user#'
+
