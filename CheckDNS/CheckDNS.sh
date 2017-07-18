@@ -6,7 +6,7 @@ exec >> $LOG_LOCATION/CheckDNS.log 2>&1
 [ ! -e /opt/CheckDNS/states ] && mkdir -p /opt/CheckDNS/states
 
 ## hostname list 
-hostnames=( api.ntent.com asgs.ntent.com )
+hostnames=( www.example1.com www.example2.com )
 echo '# '$(date -u)' #'
 echo '.......................'
 
