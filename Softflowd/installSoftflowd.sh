@@ -1,4 +1,5 @@
 #!/bin/bash
+## Tested on Centos 7.3
 yum install -y libtool automake autoconf python-devel
 yum install -y libpcap-devel
 wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/softflowd/softflowd-0.9.9.tar.gz

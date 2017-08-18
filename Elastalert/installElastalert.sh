@@ -1,8 +1,9 @@
 #!/bin/bash
+## Tested on Centos 7.3
 set -e
 set -x
 ## Install dependencies
-yum install -y python-setuptools python-devel gcc foo
+yum install -y python-setuptools python-devel gcc
 easy_install pip
 easy_install -U setuptools
 pip install setuptools --upgrade
