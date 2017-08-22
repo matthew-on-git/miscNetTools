@@ -10,3 +10,4 @@ Todo:
 - Distribution detection
 - Elasticsearch version detection for pre-reqs (see current comments in main script)
 - Maybe a config section with switches for cluster and credentials
+- Get elastalert running as a service
