@@ -16,4 +16,6 @@ pip install elastalert
 ## Elasticsearch 2.X:
 # pip install "elasticsearch<3.0.0"
 mkdir /opt/elastalert
+curl https://raw.githubusercontent.com/matthewmdn/miscNetTools/master/Elastalert/config.yaml > /opt/elastalert/config.yaml
 mkdir /opt/elastalert/rules.d
+curl https://raw.githubusercontent.com/matthewmdn/miscNetTools/master/Elastalert/ > /opt/elastalert/rules.d/rule
