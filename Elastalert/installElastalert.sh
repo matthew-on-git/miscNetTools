@@ -5,8 +5,8 @@ set -x
 ## Install dependencies
 yum install -y python-setuptools python-devel gcc
 easy_install pip
-easy_install -U setuptools
 pip install setuptools --upgrade
+easy_install -U setuptools
 ## Install Elastalert
 pip install elastalert
 ## Depending on the version of Elasticsearch, you may need to 
