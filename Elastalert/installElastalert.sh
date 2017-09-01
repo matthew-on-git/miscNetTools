@@ -18,4 +18,4 @@ pip install elastalert
 mkdir /opt/elastalert
 curl https://raw.githubusercontent.com/matthewmdn/miscNetTools/master/Elastalert/config.yaml > /opt/elastalert/config.yaml
 mkdir /opt/elastalert/rules.d
-curl https://raw.githubusercontent.com/matthewmdn/miscNetTools/master/Elastalert/example_frequency.yaml > /opt/elastalert/rules.d/rule
+curl https://raw.githubusercontent.com/matthewmdn/miscNetTools/master/Elastalert/example_frequency.yaml > /opt/elastalert/rules.d/example_frequency.yaml
