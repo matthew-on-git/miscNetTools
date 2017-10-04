@@ -32,9 +32,15 @@ CENTOS_UPDT = 'yum update'
 DEBIAN_UPDT = 'apt-get update && apt-get update'
 UBUNTU_UPDT = 'apt-get update && apt-get update'
 
+# Service status command
+STATUS_CMD = "service ${PKG} status"
+
 
 # Is package already installed
 INSTALLED = ''
+
+# Is service running
+RUNNING = ''
 
 ## === Flags === ##
 #Dry run only (make no changes)
@@ -49,13 +55,32 @@ LOG_LOCATION='/var/log/InstConf.log'
 
 ## === Functions === ##
 # Logging
-function logging() {
+function logging {
     if [ $LOG = "1" ] 
     then exec >> $LOG_LOCATION 2>&1
 }
 
+# OS detection for setting variables
+funcion osDetect {
+    if [ $ID = centos ]; then
+        PKG = $CENTOS_PKG
+        INSTALL_CMD = $CENTOS_INST
+        UPDATE_CMD = $CENTOS_UPDT
+    elif [ $ID = debian ]; then
+        PKG = $DEBIAN_PKG
+        INSTALL_CMD = $DEBIAN_INST
+        UPDATE_CMD = $DEBIAN_UPDT
+    elif [ $ID = ubuntu ]; then
+        PKG = $UBUNTU_PKG
+        INSTALL_CMD = $UBUNTU_INST
+        UPDATE_CMD = $UBUNTU_UPDT
+    else 
+        echo 'Unable to detect OS distro. Install may fail.'
+    fi
+}
+
 #Help Function
-function usage() {
+function usage {
   echo "
   usage: $0 options
   This script is used to get <software.package.x> up and running quickly on a host. It can also be used via cron to make sure the service is up and running with the latest config file sourced from your location of choice (e.g. sftp site you use to keep a central updated config for multiple nodes)
@@ -73,37 +98,12 @@ DISCLAIMER:
 }
 
 #Find OS distro
-function OStell() {
+function OStell {
     echo "Attempting to install for $PRETTYNAME"
 }
 
-#Get package name
-function getPackageName () {
-    if [ $ID = centos ]; then PKG = $CENTOS_PKG
-    elif [ $ID = debian ]; then PKG = $DEBIAN_PKG
-    elif [ $ID = ubuntu ]; then PKG = $UBUNTU_PKG
-    else 
-        echo 'Unable to detect OS distro. Install may fail.'
-    fi
-}
-
-#Get install command
-function getInstallCommand () {
-    if [ $ID = centos ]; then INSTALL_CMD = $CENTOS_INST
-    elif [ $ID = debian ]; then INSTALL_CMD = $DEBIAN_INST
-    elif [ $ID = ubuntu ]; then INSTALL_CMD = $UBUNTU_INST
-    fi
-}
-#Get update command
-function updateCMD() {
-    if [ $ID = centos ]; then UPDATE_CMD = $CENTOS_UPDT
-    elif [ $ID = debian ]; then UPDATE_CMD = $DEBIAN_UPDT
-    elif [ $ID = ubuntu ]; then UPDATE_CMD = $UBUNTU_UPDT
-    fi
-    
-}
 #Check if package is installed
-function isInstalled () {
+function isInstalled {
     if [ $ID = centos ]; then INSTALLED = `rpm -qa | grep $PKG`
     elif [ $ID = debian ]; then INSTALLED = `dpkg-query -W -f='${Status} ${Version}\n' $PKG`
     else [ $ID = ubuntu ]; then INSTALLED = `dpkg-query -W -f='${Status} ${Version}\n' $PKG`
@@ -112,7 +112,7 @@ function isInstalled () {
 }
 
 #Install software
-function installPKG() {
+function installPKG {
     if [ $INSTALLED = "" ]; # If package is not installed, 
     then $INSTALL_CMD $PREREQS $PKG
     else # Update package
@@ -124,26 +124,61 @@ function installPKG() {
     fi
 }
 
+#Check to see if servic is running
+function isRunning {
+    # if statement for running service and if not bounce and 
+    
+    if serviceStatus
+}
  
-#Login to resource server
-function connectArtServer() {
-    #login to sftp server
+#Use Rsync to sync conf files
+function updateConfs {
+    #login to sftp server using rsync and sync files
 }
 
-#Check for new versions of config files
-function verCheck() {
-    #diff local and remote files
-}
-
-#Update config files
-function replaceConfs() {
-    if [ $LOCCONF = $REMOTECONF ]; #if different
-    then echo "Running most current configs; no change."
-    else
-        #replace conf files
-    fi
-}
 
 
 
 ## === Main === ##
+
+main () {
+    while getopts "h a:u:f:m:x:v:t" OPTION
+    do
+        case $OPTION in
+            h)
+                usage
+                exit 1
+            ;;
+            a)
+                ACTION=$OPTARG
+            ;;
+            u)
+                USER=$OPTARG
+            ;;
+            f)
+                FILE=$OPTARG
+            ;;
+            m)
+                MESSAGE=$OPTARG
+            ;;
+            v)
+                VERBOSE=1
+            ;;
+            t)
+                TEST=1
+            ;;
+            ?)
+                usage
+                exit
+            ;;
+        esac
+    done
+    logging
+    osDetect
+    isInstalled
+    installPKG
+    isRunning
+
+
+}
+main
