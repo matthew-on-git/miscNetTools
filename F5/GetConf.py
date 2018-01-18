@@ -45,6 +45,7 @@ def get_irules(mgmt):
     for r_n in rules:
         print ''
         print 'Rule Name:', r_n.name
+        for 
     print ''
 def main():
     """ Main App """
