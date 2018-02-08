@@ -4,6 +4,7 @@
 
 ### add hosts to check seperated by a single space
 ### e.g. [( www.example1.com www.example2.com )]
+declare -a HOSTNAMES
 hostnames=( www.mellordesign.net www.q3hosting.com )
 
 ### Installed path (default: /opt)
